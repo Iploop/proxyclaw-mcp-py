@@ -1,0 +1,64 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "proxyclaw-mcp-server"
+version = "1.0.0"
+description = "ProxyClaw MCP Server — Route web requests through 175M+ residential IPs with TLS spoofing, headless rendering, and structured data extraction"
+readme = "README.md"
+license = { text = "MIT" }
+requires-python = ">=3.10"
+authors = [
+  { name = "IPLoop", email = "team@iploop.io" }
+]
+keywords = [
+  "mcp",
+  "proxy",
+  "residential",
+  "scraper",
+  "render",
+  "anti-bot",
+  "iploop",
+  "proxyclaw"
+]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Topic :: Internet :: WWW/HTTP",
+  "Topic :: Software Development :: Libraries :: Python Modules",
+]
+dependencies = [
+  "mcp>=1.27.0",
+  "iploop>=1.8.0",
+]
+
+[project.optional-dependencies]
+render = [
+  "playwright>=1.40.0",
+]
+stealth = [
+  "curl-cffi>=0.6.0",
+  "tls-client>=1.0.0",
+]
+all = [
+  "playwright>=1.40.0",
+  "curl-cffi>=0.6.0",
+  "tls-client>=1.0.0",
+]
+
+[project.scripts]
+proxyclaw-mcp-server = "proxyclaw_mcp_server.server:main_sync"
+
+[project.urls]
+Homepage = "https://proxyclaw.ai"
+Repository = "https://github.com/Iploop/proxyclaw-mcp.git"
+Issues = "https://github.com/Iploop/proxyclaw-mcp/issues"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/proxyclaw_mcp_server"]
