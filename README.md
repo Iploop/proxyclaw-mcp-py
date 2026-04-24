@@ -2,6 +2,24 @@
 
 Model Context Protocol server for [ProxyClaw](https://proxyclaw.ai) — the most powerful web access tool for AI agents. Route requests through 175M+ residential IPs with TLS fingerprint spoofing, headless browser rendering, and structured data extraction.
 
+## ⚡ Python vs Node.js — Which One?
+
+We ship **two** MCP servers. Choose based on what you need:
+
+| | **This repo (Python)** | **[Node.js version](https://github.com/Iploop/proxyclaw-mcp)** |
+|---|---|---|
+| **What it does** | Full anti-bot + headless render + structured extraction | Proxy routing + fetch |
+| **Best for** | Scraping protected sites (Amazon, eBay, LinkedIn), JS-rendered pages | Simple fetches, geo-targeting |
+| **Anti-detection** | TLS JA3 spoofing + Playwright anti-detection | Chrome fingerprint headers |
+| **Install** | `uvx proxyclaw-mcp-server[all]` | `npx proxyclaw-mcp-server` |
+| **Tools** | 6 (+ stealth fetch, render, scrape, extract) | 4 (fetch, check_ip, list_countries, rotate) |
+
+**→ Use Python** if you're scraping hard targets (Cloudflare, SPAs, React sites) or need structured data extraction from 60+ supported sites.
+
+**→ Use Node.js** if you just need to route requests through residential IPs.
+
+Both use the same proxy network — just different levels of power.
+
 ## Install
 
 ```bash
