@@ -58,7 +58,7 @@ TOOLS: list[Tool] = [
             "Uses Chrome fingerprint headers + TLS JA3 spoofing to bypass Cloudflare, DataDome, and bot protection. "
             "Auto-retry with fresh IP on 403/502/503."
         ),
-        input_schema={
+        inputSchema={
             "type": "object",
             "properties": {
                 "url": {"type": "string", "description": "URL to fetch (http:// or https://)"},
@@ -81,7 +81,7 @@ TOOLS: list[Tool] = [
             "Executes JavaScript, bypasses Cloudflare challenges, handles SPAs. "
             "Requires Playwright: pip install proxyclaw-mcp-server[render]"
         ),
-        input_schema={
+        inputSchema={
             "type": "object",
             "properties": {
                 "url": {"type": "string", "description": "URL to render"},
@@ -100,7 +100,7 @@ TOOLS: list[Tool] = [
             "Tries direct fetch first, then stealth (TLS spoof), then headless render, "
             "then search fallback. Returns clean HTML or structured data."
         ),
-        input_schema={
+        inputSchema={
             "type": "object",
             "properties": {
                 "url": {"type": "string", "description": "URL to scrape"},
@@ -117,7 +117,7 @@ TOOLS: list[Tool] = [
             "Supported: ebay, amazon, linkedin, twitter, google, nasdaq, youtube, "
             "reddit, imdb, github, coingecko, weather, spotify, and 40+ more."
         ),
-        input_schema={
+        inputSchema={
             "type": "object",
             "properties": {
                 "url": {"type": "string", "description": "URL of the page to extract data from"},
@@ -130,7 +130,7 @@ TOOLS: list[Tool] = [
     Tool(
         name="proxy_check_ip",
         description="Check the current exit IP address and geo-location through the proxy.",
-        input_schema={
+        inputSchema={
             "type": "object",
             "properties": {
                 "country": {"type": "string", "description": "2-letter country code to route through (optional)"},
@@ -141,7 +141,7 @@ TOOLS: list[Tool] = [
     Tool(
         name="proxy_list_countries",
         description="List all 195+ countries available for routing through ProxyClaw.",
-        input_schema={
+        inputSchema={
             "type": "object",
             "properties": {},
             "required": [],
@@ -251,7 +251,7 @@ async def handle_render(args: dict[str, Any]) -> list[TextContent]:
 
     except Exception as e:
         msg = str(e)
-        if "Playwright not installed" in msg:
+        if "Playwright not installed" in msg or "name 'Page' is not defined" in msg:
             return _err("Error: Playwright not installed. Run: pip install proxyclaw-mcp-server[render]")
         logger.exception("render failed")
         return _err(f"Render error: {e}")
@@ -333,7 +333,7 @@ async def handle_list_countries(args: dict[str, Any]) -> list[TextContent]:
     try:
         countries = client.countries()
         payload = json.dumps(countries, indent=2, default=str)
-        return _ok(payload)
+        return _ok(_trunc(payload, max_len=30000))
     except Exception as e:
         return _err(f"Failed to list countries: {e}")
 

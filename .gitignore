@@ -28,3 +28,7 @@ wheels/
 .DS_Store
 .vscode/
 .idea/
+.venv/
+venv/
+env/
+ENV/
