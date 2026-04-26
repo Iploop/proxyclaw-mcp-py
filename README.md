@@ -1,6 +1,6 @@
 # ProxyClaw MCP Server (Python)
 
-Model Context Protocol server for [ProxyClaw](https://proxyclaw.ai) — the most powerful web access tool for AI agents. Route requests through 175M+ residential IPs with TLS fingerprint spoofing, headless browser rendering, and structured data extraction.
+Model Context Protocol server for [ProxyClaw](https://proxyclaw.ai). It gives AI agents controlled residential-proxy web access, optional browser rendering, and structured extraction workflows for legitimate testing, research, and automation use cases.
 
 ## ⚡ Python vs Node.js — Which One?
 
@@ -8,13 +8,13 @@ We ship **two** MCP servers. Choose based on what you need:
 
 | | **This repo (Python)** | **[Node.js version](https://github.com/Iploop/proxyclaw-mcp)** |
 |---|---|---|
-| **What it does** | Full anti-bot + headless render + structured extraction | Proxy routing + fetch |
-| **Best for** | Scraping protected sites (Amazon, eBay, LinkedIn), JS-rendered pages | Simple fetches, geo-targeting |
-| **Anti-detection** | TLS JA3 spoofing + Playwright anti-detection | Chrome fingerprint headers |
+| **What it does** | Browser rendering + structured extraction | Proxy routing + fetch |
+| **Best for** | JS-rendered pages and structured extraction workflows | Simple fetches, geo-targeting |
+| **Networking** | Optional TLS-compatible client libraries + Playwright rendering | Standard proxy-backed fetch |
 | **Install** | `uvx proxyclaw-mcp-server[all]` | `npx proxyclaw-mcp-server` |
 | **Tools** | 6 (+ stealth fetch, render, scrape, extract) | 4 (fetch, check_ip, list_countries, rotate) |
 
-**→ Use Python** if you're scraping hard targets (Cloudflare, SPAs, React sites) or need structured data extraction from 60+ supported sites.
+**→ Use Python** if you need JavaScript rendering or structured data extraction from supported sites.
 
 **→ Use Node.js** if you just need to route requests through residential IPs.
 
@@ -23,10 +23,13 @@ Both use the same proxy network — just different levels of power.
 ## Install
 
 ```bash
-# Core (proxy + stealth headers + auto-retry)
+# Core proxy workflow
+pip install proxyclaw-mcp-server
+
+# Optional compatible HTTP clients
 pip install proxyclaw-mcp-server[stealth]
 
-# With rendering (Playwright anti-detection)
+# With browser rendering
 pip install proxyclaw-mcp-server[all]
 
 # Or via uv (Claude Desktop recommended)
@@ -55,8 +58,8 @@ Add to `claude_desktop_config.json`:
 
 | Tool | What it does |
 |------|-------------|
-| `proxy_fetch_stealth` | Fetch URL with Chrome fingerprint + TLS JA3 spoofing + auto-retry |
-| `proxy_render` | Full headless Chromium render — bypasses Cloudflare, JS apps, SPAs |
+| `proxy_fetch_stealth` | Fetch URL through ProxyClaw with optional compatible HTTP clients + retry |
+| `proxy_render` | Headless Chromium render for JavaScript apps and dynamic pages |
 | `proxy_scrape` | Smart cascade: direct → stealth → render → search fallback |
 | `proxy_extract` | Structured data from 60+ sites (eBay, Amazon, LinkedIn, Google, Nasdaq, etc.) |
 | `proxy_check_ip` | Verify exit IP and geo-location |
@@ -77,18 +80,27 @@ Then ask Claude:
 ## Features
 
 - **Residential proxy network** — 175M+ real IPs across 195+ countries
-- **TLS fingerprint spoofing** — curl_cffi / tls_client for JA3 bypass (Cloudflare can't detect you)
-- **Headless rendering** — Playwright with anti-detection (removes webdriver, mocks plugins, fake Chrome runtime)
+- **Compatible HTTP clients** — optional curl_cffi / tls_client integrations for more browser-like request behavior
+- **Headless rendering** — Playwright rendering for JavaScript-heavy pages
 - **Structured extraction** — 60+ site-specific parsers (eBay, Amazon, LinkedIn, Twitter, Nasdaq, etc.)
 - **Smart cascade** — tries direct fetch first, escalates to stealth → render → search fallback
 - **Sticky sessions** — keep same IP across requests
 - **Cookie persistence** — cookies saved between requests
-- **Auto-retry with rotation** — 403/502/503 automatically retries with fresh IP
+- **Auto-retry with rotation** — configurable retry behavior for transient proxy/network failures
+
+## Security & Trust
+
+- Source code: https://github.com/Iploop/proxyclaw-mcp-py
+- Security page: https://proxyclaw.ai/security.html
+- The package is a thin MCP adapter around the public `iploop-sdk`; it does not include install hooks, shell execution, credential exfiltration, crypto mining, or obfuscated payloads.
+- Runtime credential access is limited to `IPLOOP_API_KEY`, used only to authenticate proxy/API requests.
 
 ## Links
 
 - **Website**: [proxyclaw.ai](https://proxyclaw.ai)
+- **Security**: [proxyclaw.ai/security.html](https://proxyclaw.ai/security.html)
 - **Dashboard**: [iploop.io/dashboard](https://iploop.io/dashboard)
+- **Python MCP source**: [Iploop/proxyclaw-mcp-py](https://github.com/Iploop/proxyclaw-mcp-py)
 - **Python SDK**: [iploop on PyPI](https://pypi.org/project/iploop-sdk/)
 - **Node.js SDK**: [iploop on npm](https://www.npmjs.com/package/iploop)
 
